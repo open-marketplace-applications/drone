@@ -1,6 +1,12 @@
 
+require('dotenv').config()
+const config = require('./config.json')
+
+const latitude = process.env.CITY_LATITUDE ? process.env.CITY_LATITUDE : config.location.latitude;
+const longitude = process.env.CITY_LONGITUDE ? process.env.CITY_LONGITUDE : config.location.longitude;
+
 module.exports = {
-  mode: 'universal',
+  mode: 'ssr',
   /*
   ** Headers of the page
   */
@@ -45,12 +51,17 @@ module.exports = {
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
+    'nuxt-leaflet',
   ],
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+  },
+  env: {
+    cityLatitude: latitude,
+    cityLongitude: longitude,
   },
   /*
   ** Build configuration

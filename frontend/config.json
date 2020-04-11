@@ -1,0 +1,9 @@
+{
+    "name": "simulated-drone",
+    "description": "A Drone Simulation Programm for the Open Marketplace.",
+    "github_repo_name": "https://github.com/open-marketplace-applications/drone",
+    "location": {
+        "latitude": 52.529562,
+        "longitude": 13.413047
+    }
+}

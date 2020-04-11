@@ -3,21 +3,23 @@
     <div>
       <logo />
       <h1 class="title">
-        frontend
+        Drone
       </h1>
       <h2 class="subtitle">
-        My top-notch Nuxt.js project
+        An Open Marketplace Application
       </h2>
+      <Map />
+
       <div class="links">
         <a
-          href="https://nuxtjs.org/"
+          href="https://openmarketplace.org/"
           target="_blank"
           class="button--green"
         >
-          Documentation
+          Marketplace
         </a>
         <a
-          href="https://github.com/nuxt/nuxt.js"
+          href="https://github.com/open-marketplace-applications"
           target="_blank"
           class="button--grey"
         >
@@ -30,10 +32,11 @@
 
 <script>
 import Logo from '~/components/Logo.vue'
+import Map from '~/components/Map.vue'
 
 export default {
   components: {
-    Logo
+    Logo, Map
   }
 }
 </script>
