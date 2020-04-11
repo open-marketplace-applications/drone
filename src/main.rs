@@ -66,6 +66,12 @@ async fn with_param(req: HttpRequest, path: web::Path<(String,)>) -> HttpRespons
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
+
+    let port = env::var("PORT")
+        .unwrap_or_else(|_| "5000".to_string())
+        .parse()
+        .expect("PORT must be a number");
+
     env::set_var("RUST_LOG", "actix_web=debug,actix_server=info");
     env_logger::init();
 
@@ -121,7 +127,8 @@ async fn main() -> io::Result<()> {
                     ),
             )
     })
-    .bind("0.0.0.0:80")?
+    .bind(("0.0.0.0", port))
+    .expect("Can not bind to port")
     .run()
     .await
 }
