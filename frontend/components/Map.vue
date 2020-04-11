@@ -10,7 +10,7 @@
             @update:bounds="boundsUpdated"
           >
             <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
-            <l-marker :icon="iconTarget" :lat-lng="center">
+            <l-marker :icon="iconTarget" :lat-lng="drone.location">
               <l-popup>
               
               </l-popup>
@@ -40,6 +40,9 @@ export default {
       url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
       zoom: 13,
       center: [process.env.cityLatitude, process.env.cityLongitude],
+      drone: {
+        location: [process.env.cityLatitude, process.env.cityLongitude]
+      },
       bounds: null,
       shops: []
     };
@@ -83,8 +86,8 @@ export default {
       console.log("th", this)
       console.log("th", L)
       return L.icon({
-        iconUrl: require('@/assets/quadrocopter.svg'),
-        iconSize: [40, 40],
+        iconUrl: require('@/assets/drone.svg'),
+        iconSize: [70, 70],
         iconAnchor: [20, 20]
       })
         }
@@ -108,11 +111,7 @@ export default {
 
 <style>
 #map-wrap {
-  height: 50vh;
-  margin-top: 15px;
-}
-.map {
-  height: 100%;
+  height: 100vh;
   width: 100%;
 }
 .spots {

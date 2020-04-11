@@ -1,14 +1,13 @@
 <template>
   <div class="container">
     <div>
-      <logo />
+      <Map />
       <h1 class="title">
         Drone
       </h1>
       <h2 class="subtitle">
         An Open Marketplace Application
       </h2>
-      <Map />
 
       <div class="links">
         <a
@@ -43,9 +42,8 @@ export default {
 
 <style>
 .container {
-  margin: 0 auto;
+  margin: 0;
   min-height: 100vh;
-  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
