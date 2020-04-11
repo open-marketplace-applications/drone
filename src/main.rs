@@ -20,7 +20,7 @@ async fn favicon() -> Result<fs::NamedFile> {
 }
 
 /// simple index handler
-#[get("/welome")]
+#[get("/welcome")]
 async fn welcome(session: Session, req: HttpRequest) -> Result<HttpResponse> {
     println!("{:?}", req);
 
@@ -37,7 +37,7 @@ async fn welcome(session: Session, req: HttpRequest) -> Result<HttpResponse> {
     // response
     Ok(HttpResponse::build(StatusCode::OK)
         .content_type("text/html; charset=utf-8")
-        .body(include_str!("../static/index.html")))
+        .body(include_str!("../frontend/dist/index.html")))
 }
 
 /// 404 handler
@@ -99,12 +99,13 @@ async fn main() -> io::Result<()> {
                 )
             }))
             // static files
-            .service(fs::Files::new("/static", "static").show_files_listing())
+            .service(fs::Files::new("/", "./frontend/dist").show_files_listing())
             // redirect
             .service(web::resource("/").route(web::get().to(|req: HttpRequest| {
-                println!("{:?}", req);
+                println!("index");
+                // println!("{:?}", req);
                 HttpResponse::Found()
-                    .header(header::LOCATION, "static/index.html")
+                    .header(header::LOCATION, "./frontend/dist/index.html")
                     .finish()
             })))
             // default
@@ -120,7 +121,7 @@ async fn main() -> io::Result<()> {
                     ),
             )
     })
-    .bind("127.0.0.1:3000")?
+    .bind("127.0.0.1:5000")?
     .run()
     .await
 }
