@@ -12,7 +12,7 @@
             <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
             <l-marker :icon="iconTarget" :lat-lng="drone.location">
               <l-popup>
-              
+                {{drone}}
               </l-popup>
             </l-marker>
 
@@ -65,14 +65,9 @@ export default {
   },
   async created() {
     try {
-    //    const { data } = await this.$axios.get(process.env.cityUrl + '/shops')
-    //     console.log("data", data)
-    //     this.shops = data
-    //     this.shops.forEach(shop => {
-    //       const codeArea = iotaAreaCodes.decode(shop.iac);
-    //       shop.location = [codeArea.latitude, codeArea.longitude]
-    //     });
-    //     console.log("data", this.shops)
+       const { data } = await this.$axios.get(process.env.droneUrl + '/drone')
+        this.drone = data
+        console.log("drone", this.drone)
     } catch (error) {
       console.log("error fetching marketmap data", error)
     }

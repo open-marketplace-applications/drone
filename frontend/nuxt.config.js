@@ -60,6 +60,7 @@ module.exports = {
   axios: {
   },
   env: {
+    droneUrl: process.env.DRONE_URL || 'http://localhost:5000',
     cityLatitude: latitude,
     cityLongitude: longitude,
   },
