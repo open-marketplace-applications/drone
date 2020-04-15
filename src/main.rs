@@ -2,24 +2,14 @@
 extern crate actix_web;
 use actix_cors::Cors;
 
-use std::{env};
+use std::env;
+
+use ::drone::Drone;
+use rand::prelude::*;
 
 use actix_files as fs;
-use actix_session::{Session};
-use actix_web::{
-    http, App, HttpRequest, HttpResponse, HttpServer,
-    Result,
-};
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Drone {
-    id: u8,
-    name: String,
-    version: String,
-    location: Vec<String>,
-
-}
+use actix_session::Session;
+use actix_web::{http, App, HttpRequest, HttpResponse, HttpServer, Result};
 
 /// simple index handler
 #[get("/drone")]
@@ -36,18 +26,11 @@ async fn drone(session: Session, req: HttpRequest) -> Result<HttpResponse> {
     // set counter to session
     session.set("counter", counter)?;
 
-    let data = r#"
-    {
-        "id": 42,
-        "name": "Simulated Drone 42",
-        "version": "0.1.4",
-        "location": [
-                "52.529797",
-                "13.413094"
-            ]
-    }"#;
+    let lat = thread_rng().gen_range(52, 55).to_string();
+    let long = thread_rng().gen_range(13, 16).to_string();
 
-    let d: Drone = serde_json::from_str(data)?;
+    let d: Drone = Drone::new_at(lat, long);
+
     Ok(HttpResponse::Ok().json(d)) // <- send response
 }
 
@@ -71,13 +54,13 @@ async fn main() -> std::io::Result<()> {
                     .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
                     .allowed_header(http::header::CONTENT_TYPE)
                     .max_age(3600)
-                    .finish())
+                    .finish(),
+            )
             .service(drone)
             .service(
                 // static files
                 fs::Files::new("/", "./frontend/dist/").index_file("index.html"),
             )
-
     })
     .bind(("0.0.0.0", port))?
     .run()
