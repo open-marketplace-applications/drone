@@ -64,14 +64,17 @@ export default {
     }
   },
   async created() {
-    try {
-       const { data } = await this.$axios.get(process.env.droneUrl + '/drone')
-        this.drone = data
-        console.log("drone", this.drone)
-    } catch (error) {
-      console.log("error fetching marketmap data", error)
-    }
-       
+    let self = this
+    setInterval(async function(){
+      try {
+        const { data } = await self.$axios.get(process.env.droneUrl + '/drone')
+          self.drone = data
+          console.log("drone", self.drone)
+      } catch (error) {
+        console.log("error fetching marketmap data", error)
+      }
+    }, 3000);
+
   },
   computed: {
     iconTarget() {
