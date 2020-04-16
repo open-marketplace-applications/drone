@@ -1,43 +1,28 @@
 <template>
   <div class="container">
-    <div>
-      <Map />
-      <h1 class="title">
-        Drone
-      </h1>
-      <h2 class="subtitle">
-        An Open Marketplace Application
-      </h2>
-
-      <div class="links">
-        <a
-          href="https://openmarketplace.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Marketplace
-        </a>
-        <a
-          href="https://github.com/open-marketplace-applications"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
+    <Header :collapsed="collapsed" />
+    <Map />
+    <Footer :collapsed="collapsed" />
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import Map from '~/components/Map.vue'
+import Header from "~/components/Header.vue";
+import Map from "~/components/Map.vue";
+import Footer from "~/components/Footer.vue";
 
 export default {
   components: {
-    Logo, Map
+    Header,
+    Map,
+    Footer
+  },
+  data() {
+    return {
+      collapsed: false
+    };
   }
-}
+};
 </script>
 
 <style>
@@ -50,8 +35,8 @@ export default {
 }
 
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: block;
   font-weight: 300;
   font-size: 100px;
