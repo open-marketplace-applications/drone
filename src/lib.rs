@@ -80,7 +80,7 @@ pub mod simulator {
                         -max_velocity
                     }
                 }
-                _ => normalized[0],
+                _ => normalized[1],
             };
 
             let lat = (own_lat + vel1).to_string();
