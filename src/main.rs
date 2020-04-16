@@ -1,37 +1,21 @@
 #[macro_use]
 extern crate actix_web;
+use ::drone::simulator::Drone;
 use actix_cors::Cors;
-
-use std::env;
-
-use ::drone::Drone;
-use rand::prelude::*;
-
 use actix_files as fs;
-use actix_session::Session;
-use actix_web::{http, App, HttpRequest, HttpResponse, HttpServer, Result};
+use actix_web::{http, web, App, HttpRequest, HttpResponse, HttpServer, Result};
+use std::env;
+use std::sync::Mutex;
 
-/// simple index handler
 #[get("/drone")]
-async fn drone(session: Session, req: HttpRequest) -> Result<HttpResponse> {
-    println!("{:?}", req);
+async fn drone(req: HttpRequest, drone: web::Data<Mutex<Drone>>) -> Result<HttpResponse> {
+    // println!("{:?}", req);
 
-    // session
-    let mut counter = 1;
-    if let Some(count) = session.get::<i32>("counter")? {
-        println!("SESSION value: {}", count);
-        counter = count + 1;
-    }
+    let mut drone = drone.lock().unwrap();
+    drone.update();
 
-    // set counter to session
-    session.set("counter", counter)?;
-
-    let lat = thread_rng().gen_range(52, 55).to_string();
-    let long = thread_rng().gen_range(13, 16).to_string();
-
-    let d: Drone = Drone::new_at(lat, long);
-
-    Ok(HttpResponse::Ok().json(d)) // <- send response
+    let response = HttpResponse::Ok().json(drone.get_serialized());
+    Ok(response)
 }
 
 #[actix_rt::main]
@@ -46,6 +30,11 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
+            .data(Mutex::new(Drone::new_from_target(vec![
+                // Berlin Tv Tower
+                "52.520642".to_owned(),
+                "13.409398".to_owned(),
+            ])))
             // enable logger
             .wrap(
                 Cors::new() // <- Construct CORS middleware builder
