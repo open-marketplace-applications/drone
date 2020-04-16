@@ -5,9 +5,6 @@
         class="map"
         :zoom="zoom"
         :center="center"
-        @update:zoom="zoomUpdated"
-        @update:center="centerUpdated"
-        @update:bounds="boundsUpdated"
       >
         <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
         <l-marker :icon="iconTarget" :lat-lng="drone.target_location">
@@ -50,28 +47,13 @@ export default {
       shops: []
     };
   },
-  methods: {
-    zoomUpdated(zoom) {
-      this.zoom = zoom;
-    },
-    centerUpdated(center) {
-      this.center = center;
-      //   this.$store.commit('location/setLat', center.lat)
-      //   this.$store.commit('location/setLng', center.lng)
-      //   console.log('this.$store.location.lat', this.$store.state.location.lat)
-      //   console.log('this.$store.location.lat', center)
-    },
-    boundsUpdated(bounds) {
-      this.bounds = bounds;
-    }
-  },
   async created() {
     let self = this;
     setInterval(async () => {
       try {
         const { data } = await self.$axios.get(process.env.droneUrl + "/drone");
         self.drone = data;
-        // self.center = data.location;
+        self.center = data.location;
         console.log("drone", self.drone);
       } catch (error) {
         console.log("error fetching marketmap data", error);
