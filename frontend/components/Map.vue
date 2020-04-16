@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
-      zoom: 16,
+      zoom: 15,
       center: [process.env.cityLatitude, process.env.cityLongitude],
       drone: {
         location: [process.env.cityLatitude, process.env.cityLongitude],
@@ -72,7 +72,7 @@ export default {
       try {
         const { data } = await self.$axios.get(process.env.droneUrl + "/drone");
         self.drone = data;
-        self.center = data.location;
+        // self.center = data.location;
         console.log("drone", self.drone);
       } catch (error) {
         console.log("error fetching marketmap data", error);
@@ -88,7 +88,7 @@ export default {
         return L.icon({
           iconUrl: require("@/assets/drone.svg"),
           iconSize: [70, 70],
-          iconAnchor: [20, 20]
+          iconAnchor: [35, 35]
         });
       }
     },
@@ -111,8 +111,8 @@ export default {
         console.log("th", L);
         return L.icon({
           iconUrl: require("@/assets/target.svg"),
-          iconSize: [40, 40],
-          iconAnchor: [20, 20]
+          iconSize: [35, 35],
+          iconAnchor: [17.5, 17.5]
         });
       }
     }

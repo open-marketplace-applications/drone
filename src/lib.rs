@@ -86,7 +86,7 @@ pub mod simulator {
 
             let magnitude = f32::sqrt(dx.powf(2.0) + dy.powf(2.0));
 
-            if magnitude < 0.001 {
+            if magnitude < 0.0001 {
                 self.state = State::Idle;
                 return;
             }
@@ -94,8 +94,8 @@ pub mod simulator {
             let xnormal = dx / magnitude;
             let ynormal = dy / magnitude;
 
-            let max_velocity = if magnitude < 0.002 {
-                magnitude / 4.0
+            let max_velocity = if magnitude < 0.003 {
+                magnitude / 3.0
             } else {
                 0.0007
             };
@@ -103,10 +103,10 @@ pub mod simulator {
             let xvel = max_velocity * xnormal;
             let yvel = max_velocity * ynormal;
 
-            let lat = (own_lat + xvel).to_string();
-            let long = (own_long + yvel).to_string();
+            let new_lat = (own_lat + xvel).to_string();
+            let new_long = (own_long + yvel).to_string();
 
-            self.set_location(lat, long);
+            self.set_location(new_lat, new_long);
 
             println!(
                 "distance to target ({:?}): {:.4} | xnormal: {} ynormal: {} xvel: {} yvel: {}",
