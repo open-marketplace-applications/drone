@@ -10,13 +10,12 @@
         @update:bounds="boundsUpdated"
       >
         <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
-        <l-marker :icon="iconDrone" :lat-lng="drone.location">
-          <l-popup>{{drone}}</l-popup>
-        </l-marker>
         <l-marker :icon="iconTarget" :lat-lng="drone.target_location">
           <l-popup>{{drone}}</l-popup>
         </l-marker>
-
+        <l-marker :icon="iconDrone" :lat-lng="drone.location">
+          <l-popup>{{drone}}</l-popup>
+        </l-marker>
         <l-marker
           v-for="(shop, index) in shops"
           :key="index"
