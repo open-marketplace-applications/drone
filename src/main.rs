@@ -19,7 +19,7 @@ async fn drone(req: HttpRequest, drone: web::Data<Mutex<Drone>>) -> Result<HttpR
         State::Idle => {
             let new_lat = thread_rng().gen_range(52.49, 52.55).to_string();
             let new_long = thread_rng().gen_range(13.39, 13.45).to_string();
-            drone.new_target(new_lat.to_owned(), new_long.to_owned());
+            drone.set_target(new_lat.to_owned(), new_long.to_owned());
             drone.state = State::Operating;
         }
         _ => (),

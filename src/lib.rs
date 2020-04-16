@@ -67,7 +67,7 @@ pub mod simulator {
             self.location = vec![latitude, longitude];
         }
 
-        pub fn new_target(&mut self, latitude: String, longitude: String) {
+        pub fn set_target(&mut self, latitude: String, longitude: String) {
             self.target_location = vec![latitude, longitude];
         }
 
@@ -81,36 +81,37 @@ pub mod simulator {
             let target_lat = self.target_location[0].parse::<f32>().unwrap();
             let target_long = self.target_location[1].parse::<f32>().unwrap();
 
-            let v1 = target_lat - own_lat;
-            let v2 = target_long - own_long;
+            let dx = target_lat - own_lat;
+            let dy = target_long - own_long;
 
-            let magnitude = f32::sqrt(v1.powf(2.0) + v2.powf(2.0));
+            let magnitude = f32::sqrt(dx.powf(2.0) + dy.powf(2.0));
 
             if magnitude < 0.001 {
                 self.state = State::Idle;
                 return;
             }
 
-            let normalized = vec![v1 / magnitude, v2 / magnitude];
+            let xnormal = dx / magnitude;
+            let ynormal = dy / magnitude;
 
-            let mut max_velocity = 0.0007;
+            let max_velocity = if magnitude < 0.002 {
+                magnitude / 4.0
+            } else {
+                0.0007
+            };
 
-            if magnitude < 0.002 {
-                max_velocity = magnitude / 4.0;
-            }
+            let xvel = max_velocity * xnormal;
+            let yvel = max_velocity * ynormal;
 
-            let vel1 = max_velocity * normalized[0];
-            let vel2 = max_velocity * normalized[1];
-
-            let lat = (own_lat + vel1).to_string();
-            let long = (own_long + vel2).to_string();
-
-            println!(
-                "distance to target ({:?}): {:.4} | normal1: {} normal2: {} vel1: {} vel2: {}",
-                self.target_location, magnitude, normalized[0], normalized[1], vel1, vel2
-            );
+            let lat = (own_lat + xvel).to_string();
+            let long = (own_long + yvel).to_string();
 
             self.set_location(lat, long);
+
+            println!(
+                "distance to target ({:?}): {:.4} | xnormal: {} ynormal: {} xvel: {} yvel: {}",
+                self.target_location, magnitude, xnormal, ynormal, xvel, yvel
+            );
         }
 
         pub fn update(&mut self) {
