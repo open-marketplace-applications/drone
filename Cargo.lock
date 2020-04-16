@@ -532,6 +532,7 @@ dependencies = [
  "env_logger",
  "futures",
  "json",
+ "rand",
  "serde",
  "serde_json",
 ]

@@ -1,9 +1,10 @@
 #[macro_use]
 extern crate actix_web;
-use ::drone::simulator::Drone;
+use ::drone::simulator::{Drone, State};
 use actix_cors::Cors;
 use actix_files as fs;
 use actix_web::{http, web, App, HttpRequest, HttpResponse, HttpServer, Result};
+use rand::prelude::*;
 use std::env;
 use std::sync::Mutex;
 
@@ -14,7 +15,17 @@ async fn drone(req: HttpRequest, drone: web::Data<Mutex<Drone>>) -> Result<HttpR
     let mut drone = drone.lock().unwrap();
     drone.update();
 
-    let response = HttpResponse::Ok().json(drone.get_serialized());
+    match drone.state() {
+        State::Idle => {
+            let new_lat = thread_rng().gen_range(52.49, 52.55).to_string();
+            let new_long = thread_rng().gen_range(13.39, 13.45).to_string();
+            drone.new_target(new_lat.to_owned(), new_long.to_owned());
+            drone.state = State::Operating;
+        }
+        _ => (),
+    }
+
+    let response = HttpResponse::Ok().json(drone.clone());
     Ok(response)
 }
 
@@ -30,7 +41,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            .data(Mutex::new(Drone::new_from_target(vec![
+            .data(Mutex::new(Drone::new_with_target(vec![
                 // Berlin Tv Tower
                 "52.520642".to_owned(),
                 "13.409398".to_owned(),

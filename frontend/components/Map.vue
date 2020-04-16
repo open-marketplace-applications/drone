@@ -73,7 +73,7 @@ export default {
       } catch (error) {
         console.log("error fetching marketmap data", error);
       }
-    }, 3000);
+    }, 2000);
   },
   computed: {
     iconTarget() {
