@@ -10,7 +10,10 @@
         @update:bounds="boundsUpdated"
       >
         <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
-        <l-marker :icon="iconTarget" :lat-lng="drone.location">
+        <l-marker :icon="iconDrone" :lat-lng="drone.location">
+          <l-popup>{{drone}}</l-popup>
+        </l-marker>
+        <l-marker :icon="iconTarget" :lat-lng="drone.target_location">
           <l-popup>{{drone}}</l-popup>
         </l-marker>
 
@@ -41,7 +44,8 @@ export default {
       zoom: 16,
       center: [process.env.cityLatitude, process.env.cityLongitude],
       drone: {
-        location: [process.env.cityLatitude, process.env.cityLongitude]
+        location: [process.env.cityLatitude, process.env.cityLongitude],
+        target_location: [0, 0]
       },
       bounds: null,
       shops: []
@@ -76,7 +80,7 @@ export default {
     }, 2000);
   },
   computed: {
-    iconTarget() {
+    iconDrone() {
       if (process.browser) {
         require("vue2-leaflet");
         console.log("th", this);
@@ -95,6 +99,18 @@ export default {
         console.log("th", L);
         return L.icon({
           iconUrl: require("@/assets/shop_smal.svg"),
+          iconSize: [40, 40],
+          iconAnchor: [20, 20]
+        });
+      }
+    },
+    iconTarget() {
+      if (process.browser) {
+        require("vue2-leaflet");
+        console.log("th", this);
+        console.log("th", L);
+        return L.icon({
+          iconUrl: require("@/assets/target.svg"),
           iconSize: [40, 40],
           iconAnchor: [20, 20]
         });
