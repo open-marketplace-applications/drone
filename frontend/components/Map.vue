@@ -49,16 +49,46 @@ export default {
   },
   async created() {
     let self = this;
+    let intervalinms = 3000
+    let oldPosition
     setInterval(async () => {
       try {
         const { data } = await self.$axios.get(process.env.droneUrl + "/drone");
+        if(typeof oldPosition == 'undefined'){
+            oldPosition = data.location
+        }
+        //increase value slowly until target is reached
+        let distancex = data.location[0]-oldPosition[0]
+        let distancey = data.location[1]-oldPosition[1]
+        let iterations = 70
+        let timenow = Date.now()
+        for(let j= 0; j<iterations-5; j++){
+          if(Date.now()-timenow>intervalinms){
+            console.log("time reached, break");
+            break
+          }
+          let newPos = []
+          if(distancex > 0){
+            newPos[0] = parseFloat(self.drone.location[0])+(Math.abs(distancex)/iterations)
+          } else {
+            newPos[0] = parseFloat(self.drone.location[0])-(Math.abs(distancex)/iterations)
+          }
+          if(distancey > 0){
+            newPos[1] = parseFloat(self.drone.location[1])+(Math.abs(distancey)/iterations)
+          } else {
+            newPos[1] = parseFloat(self.drone.location[1])-(Math.abs(distancey)/iterations)
+          }
+          self.drone.location = newPos
+          await new Promise(resolve => setTimeout(resolve, intervalinms/iterations));
+        }
+        //set final value
+        oldPosition = data.location
         self.drone = data;
-        self.center = data.location;
-        console.log("drone", self.drone);
+        self.center = self.drone.target_location
       } catch (error) {
         console.log("error fetching marketmap data", error);
       }
-    }, 2000);
+    }, intervalinms);
   },
   computed: {
     iconDrone() {
