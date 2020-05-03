@@ -39,6 +39,8 @@ async fn main() -> std::io::Result<()> {
         .parse()
         .expect("PORT must be a number");
 
+    println!("Server listening on port {}", port);
+
     HttpServer::new(|| {
         App::new()
             .data(Mutex::new(Drone::new_with_target(vec![
