@@ -5,7 +5,7 @@
   <a href="https://openmarketplace.org/">
      <img
       alt="open marketplace apps"
-      src="./static/oma.jpg"
+      src="./frontend/static/oma.jpg"
       width="200"
     />
   </a>
