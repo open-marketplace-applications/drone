@@ -44,7 +44,7 @@ async fn main() -> std::io::Result<()> {
     //  -------- IOTA network settings ---------
 
     // Connect to an IOTA node
-    let mut client = iota_client::Client::new("https://nodes.comnet.thetangle.org:443");
+    let mut client = iota_client::Client::new("https://nodes.devnet.iota.org:443");
 
     // Change the default settings to use a lower minimum weight magnitude for the Devnet
     let mut send_opt = SendTrytesOptions::default();
